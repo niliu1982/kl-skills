@@ -21,7 +21,7 @@ fi
 
 # 2. 复制所有 skills 到 codebuddy skills 目录
 echo "==> 安装 skills 到: $SKILLS_DIR"
-for skill in ekp-price-review ekp-order-prod-status loan-interest-calc ekp-add-config; do
+for skill in ekp-price-review ekp-order-prod-status loan-interest-calc ekp-add-config ekp-flow-search; do
   if [ -d "$REPO_DIR/$skill" ]; then
     cp -r "$REPO_DIR/$skill" "$SKILLS_DIR/"
     echo "    已安装: $skill"
