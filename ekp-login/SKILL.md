@@ -109,6 +109,20 @@ return "login_ok";
 
 登录后 snapshot 检查页面是否包含"欢迎您"。如出现验证码，截图让用户手动输入。
 
+### 步骤 5：保持会话（重要）
+
+登录完成后 **不要关闭浏览器**。浏览器 daemon 保持运行，所有后续 EKP 操作直接复用当前会话。
+
+```bash
+# ❌ 不要执行
+agent-browser close
+
+# ✅ 登录后直接进入业务操作
+agent-browser open "https://ekp.king-long.com.cn/kl/price/..."
+```
+
+登录完成后导航回门户页确认状态，然后保持浏览器打开即可。
+
 ## 常见问题
 
 ### 证书错误
