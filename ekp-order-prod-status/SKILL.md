@@ -104,6 +104,11 @@ Snapshot 包含两部分：
 
 ## 注意事项
 
+- **必须先完成 ekp-login 的浏览器启动配置**：EKP 投产页靠 `window.open` 弹窗打开，
+  若浏览器未带 `--disable-popup-blocking` 启动，prodStatus 页会报"操作失败！"。
+  用 `ekp-login/scripts/browser-start.sh` 启动浏览器可避免此问题
 - 搜索结果仅有一行时，可直接取 `kmss_href` 导航；多行时需匹配对应车号
 - `kmss_href` 属性是 EKP 框架自定义属性，标准 click 不会触发，需直接导航到其值
+- 打开 prodStatus 的正确姿势：对订单行 `<tr>` 派发 mousedown→mouseup→click 事件序列，
+  触发 EKP 的 `List_ClickRow()` → `Com_OpenWindow()` → `window.open(url, "_blank")`
 - 浏览器会话保持，查询完成后无需关闭

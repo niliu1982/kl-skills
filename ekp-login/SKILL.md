@@ -14,6 +14,38 @@ agent_created: true
 - EKP 凭据已存储（首次使用时会引导配置）
 - agent-browser 或 playwright-cli 可用
 
+## ⚠️ 浏览器启动配置（重要，先做）
+
+**headless Chromium 默认拦截弹窗**，而 EKP 投产详情页（`prodStatus`）是
+通过 `window.open(..., "_blank")` 弹窗打开的。拦截会导致投产页打开报
+`"操作失败！很抱歉，操作失败！"`（window.open 返回 null）。
+
+**必须用 `--disable-popup-blocking` 启动浏览器。** 直接运行配套脚本：
+
+```bash
+bash <ekp-login 技能目录>/scripts/browser-start.sh
+# 或指定端口：EKP_CDP_PORT=9333 bash browser-start.sh
+```
+
+脚本做的事（可手动替代）：
+
+```bash
+# 1. 启动 Chromium（关键参数 --disable-popup-blocking）
+nohup chromium --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+  --disable-software-rasterizer --disable-popup-blocking \
+  --remote-debugging-port=9222 about:blank > /tmp/ekp-chromium.log 2>&1 &
+
+# 2. 等 CDP 就绪后连接
+agent-browser connect 9222
+```
+
+**根因备忘**：
+- agent-browser 自动启动（auto-launch）在 root 沙箱常失败
+  （报 `Auto-launch failed: CDP command timed out: Target.setDiscoverTargets`），
+  因为它没带 `--no-sandbox`。此时不要硬等自动启动，**手动启动 + connect**。
+- 手动启动的浏览器如果漏了 `--disable-popup-blocking`，会出现
+  "prodStatus 直接打开报操作失败"的现象——不是 EKP 问题，是弹窗被拦。
+
 ## 凭据管理
 
 凭据优先级：环境变量 > 配置文件
