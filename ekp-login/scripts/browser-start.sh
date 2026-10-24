@@ -16,7 +16,6 @@
 # 用法：
 #   bash browser-start.sh            # 默认端口 9222
 #   EKP_CDP_PORT=9333 bash browser-start.sh   # 指定端口
-# ============================================================
 set -e
 
 PORT="${EKP_CDP_PORT:-9222}"
